@@ -1,30 +1,28 @@
 #!/bin/sh 
-#**************************************************************************** #
-#                                                                             #
-#        Firewall implementation script for simple firewall policy            #
-#       Release version 1.0 by Terence Broadbent BSc Cyber Security           #
-#                                                                             # 
-# *************************************************************************** # 
+#------------------------------------------------------------------------------                                                                         
+#        Firewall implementation script for simple firewall policy            
+#       Release version 1.0 by Terence Broadbent BSc Cyber Security                                                                                        
+# -----------------------------------------------------------------------------
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Define global variables used by this bash script.                 #
-# Modified: N/A                                                               #
-# *************************************************************************** # 
+# -----------------------------------------------------------------------------
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Define global variables used by this bash script.                 
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 NET="ens33" # IMPORTANT!! CHANGE THIS TO MATCH YOUR NETWORK
 IFS=","     # Enables script to read data from text files separated by commas.
 LOGFILE="./Log1.txt" # The default log filename. 
  
-# *************************************************************************** #
-# AUTHOR  : Terence Broadbent                                                 #
-# CONTRACT: SME                                                               #
-# Version : 1.0                                                               #
-# Details : Create log system & check that this script has root privileges.   # 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# -----------------------------------------------------------------------------
+# AUTHOR  : Terence Broadbent                                                 
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Create log system & check that this script has root privileges.   
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog() ( echo $1 echo $1 >> $LOGFILE ) 
 
@@ -35,13 +33,13 @@ else
     echolog "\n\tLINUX FIREWALL INSTALLATION LOG - VERSION 1.0\n" 
 fi 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 #
-# CONTRACT: SME                                                               #
-# Version : 1.0                                                               # 
-# Details : Ensure current firewall configuration is backed up & wiped clean. # 
-# Modified: N/A                                                               #
-# *************************************************************************** # 
+# ----------------------------------------------------------------------------- 
+# AUTHOR  : Terence Broadbent                                                 
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Ensure current firewall configuration is backed up & wiped clean. 
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[1]. Starting the firewall installation...\n" 
 iptables-save -c > "./Iptables-old.txt" 2>&1 | tee -a $LOGFILE 
@@ -56,13 +54,13 @@ echolog "\t + Iptables cleaned and wiped."
 echolog "\t + Restarting services." ufw enable 2>&1 | tee -a $LOGFILE 
 echolog "\t - Cleaning of iptables completed.\n" 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Accept traffic through loopback 'lo' interface on the network.    # 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# ----------------------------------------------------------------------------- 
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Accept traffic through loopback 'lo' interface on the network.    
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[3]. Setting up a loopback on the firewall...\n" 
 echolog "\t + Allowed: Loopback services." 
@@ -70,13 +68,13 @@ iptables -A INPUT -i lo -j ACCEPT 2>&1 | tee -a $LOGFILE
 iptables -A OUTPUT -o lo -j ACCEPT 2>&1 | tee -a $LOGFILE 
 echolog "\t - Provision of loopback completed.\n"  
 
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Protect the network from denial of service and pesky hackers.     # 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# -----------------------------------------------------------------------------
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Protect the network from denial of service and pesky hackers.     
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[4]. Protecting the network from threat actors (Hackers!)...\n" 
 echolog "\t + Blocking: Multicast IPs." 
@@ -157,14 +155,14 @@ iptables -A OUTPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP 2>&1 | tee -a $LOG
 iptables -A OUTPUT -f -j DROP 2>&1 | tee -a $LOGFILE 
 echolog "\t - Protection of the network completed.\n" 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 #
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Open a IP black list file and reject them from the network.       # 
-# TechNote: Best practice is to DROP however - specification states REJECT.   # 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# ----------------------------------------------------------------------------- 
+# AUTHOR  : Terence Broadbent                                                 
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Open a IP black list file and reject them from the network.       
+# TechNote: Best practice is to DROP however - specification states REJECT.   
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[5]. Loading the IP black list into the firewall...\n"
 echolog "\t + Checking list exists." 
@@ -182,14 +180,14 @@ while read ip1 do
 done < "IP black list.txt" 
 echolog "\t - Blacklisting IP addresses completed.\n" 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Open list file of protocols and ports to reject from the network. # 
-# TechNote: Best practice is to DROP however -specification states REJECT.    # 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# ----------------------------------------------------------------------------- 
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Open list file of protocols and ports to reject from the network. 
+# TechNote: Best practice is to DROP however -specification states REJECT.    
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[6]. Loading the list of ports to block into the firewall...\n" 
 echolog "\t + Checking list exists." test -e "Banned ports list.txt" 2>&1 | tee -a $LOGFILE 
@@ -206,14 +204,14 @@ while read type2 pr2 p2 do
 done < "Banned ports list.txt" 
 echolog "\t - Port blocking completed.\n" 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               #
-# Version : 1.0                                                               # 
-# Details : Open a simple list of banned websites to block from the network.  # 
-# TechNote:  Upgrade to transparent HTTP proxy utilising squid in the future!!# 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# ----------------------------------------------------------------------------- 
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Open a simple list of banned websites to block from the network.  
+# TechNote:  Upgrade to transparent HTTP proxy utilising squid in the future!!
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[7]. Loading the list of banned websites into the firewall...\n" 
 echolog "\t + Checking list exists." test -e "Banned websites list.txt" 2>&1 | tee -a $LOGFILE 
@@ -230,13 +228,13 @@ while read url3 do
 done < "Banned websites list.txt" 
 echolog "\t - Banning websites completed.\n" 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Open a IP white list file and allow them on the network.          # 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# -----------------------------------------------------------------------------
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Open a IP white list file and allow them on the network.          
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[8]. Loading the IP white list into the firewall.\n" 
 echolog "\t + Checking list exists." 
@@ -255,26 +253,26 @@ while read ip4 p4 do
 done < "IP white list.txt" 
 echolog "\t - White listing of IP addresses completed.\n" 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Finally block access to everyone else.                            # 
-# Modified: N/A                                                               #
-# ***************************************************************************# 
+# ----------------------------------------------------------------------------- 
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Finally block access to everyone else.                            
+# Modified: N/A                                                              
+# -----------------------------------------------------------------------------
  
 echolog "[9]. Blocking all other access to the network...\n" 
 iptables -A INPUT -j DROP 2>&1 | tee -a $LOGFILE
 echolog "\t + Blocking: All other access." 
 echolog "\t - Blocking of all other access completed.\n" 
  
-# *************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                 # 
-# CONTRACT: SME                                                               # 
-# Version : 1.0                                                               # 
-# Details : Creating a logging chain for all dropped packets.                 # 
-# Modified: N/A                                                               # 
-# *************************************************************************** # 
+# -----------------------------------------------------------------------------
+# AUTHOR  : Terence Broadbent                                                  
+# CONTRACT: SME                                                               
+# Version : 1.0                                                               
+# Details : Creating a logging chain for all dropped packets.                 
+# Modified: N/A                                                               
+# -----------------------------------------------------------------------------
  
 echolog "[10]. Finally - creating a logging chain for dropped packets...\n" 
 iptables -N LOGGING 2>&1 | tee -a $LOGFILE 
@@ -285,13 +283,13 @@ iptables -A LOGGING -j DROP 2>&1 | tee -a $LOGFILE
 echolog "\t + Logging chain IPTables-Dropped created." 
 echolog "\t - logging all dropped packets completed.\n" 
  
-# ************************************************************************** # 
-# AUTHOR  : Terence Broadbent                                                #
-# CONTRACT: SME                                                              # 
-# Version : 1.0                                                              # 
-# Details : Save configuration & display the final settings to the screen.   #
-# Modified: N/A                                                              # 
-# ************************************************************************** # 
+# ---------------------------------------------------------------------------- 
+# AUTHOR  : Terence Broadbent                                                
+# CONTRACT: SME                                                              
+# Version : 1.0                                                              
+# Details : Save configuration & display the final settings to the screen.  
+# Modified: N/A                                                              
+# ----------------------------------------------------------------------------
  
 echolog "[11]. Program completed sucessfully...\n" 
 echolog "\t - Setting up save and exit configuration." 

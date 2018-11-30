@@ -1,6 +1,7 @@
 # Linux Firewall
+sh firewall-installation-script.sh
 
-Linux firewall policy and automated shell script installation procedure using iptables. Also includes automated post installation security compliance penetration test script.
+Shell script file installation procedure using iptables. Also includes an automated post installation security compliance penetration test script and a basic policy.
 
 ![Screenshot](Iptables.png)
 

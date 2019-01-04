@@ -11,7 +11,7 @@ Shell script file installation procedure using iptables. Also includes an automa
 
 Bonus!! Now includes a shell script to post penetration test the installation for security compliance.
 
-##IPTABLE SETTINGS
+## IPTABLE SETTINGS
 ![Screenshot](Iptables.png)
 
 

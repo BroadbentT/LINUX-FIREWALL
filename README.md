@@ -10,6 +10,6 @@
 A shell script installation file utilising Linux iptables, comes complete with a basic firewall policy. Now also includes a shell script file for post penetration testing of the installation for security compliance requirments.
 
 ## IPTABLE SETTINGS
-![Screenshot](Iptables.png)
+<center> ![Screenshot](Iptables.png) </center>
 
 

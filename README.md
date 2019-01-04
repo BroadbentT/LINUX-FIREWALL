@@ -7,9 +7,7 @@
 
 - [x] Working for prescribed firewall requirement.
 
-Shell script file installation procedure using iptables, also includes a basic firewall policy.
-
-Bonus!! Now includes a shell script to post penetration test the installation for security compliance.
+Shell script file installation procedure using iptables, includes a shell script to post penetration test the installation for security compliance and a basic firewall policy.
 
 ## IPTABLE SETTINGS
 ![Screenshot](Iptables.png)
